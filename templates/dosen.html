@@ -1,0 +1,44 @@
+{% extends 'navbar.html' %}
+{% block content %}
+<p></p>
+    <div class="jumbotron jumbotron-fluid container mt-10 ">
+        <div class="row text-center">
+            <div class="col-md text-center">
+                <h3>DOSEN</h3>
+            </div>
+        </div>
+        <div class=" container">
+            <div class="row">
+                <div class="col-md">
+                    <div class="card-group">
+                        <div class="card" style="width: 18rem;">
+                            {%for i in data%}
+                            <div class="card-body">
+                                
+                              <h5 class="card-header">
+                                <p font-size="8">{{ i[2] }}</p>
+                              </h5>
+                              <p class="card-text">{{ i[12] }}</p>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                              <li class="list-group-item">
+                                      <tr>
+                                          <td> Matkul </td>
+                                          <td>:</td>
+                                          <td>{{ i[0] }}</td>
+                                      </tr>
+                              </li>
+                              <li class="list-group-item">
+                                <tr>
+                                    <td>Kode Matakuliah</td>
+                                    <td>:</td>
+                                    <td>{{ i[1] }}</td>
+                                </tr>
+                              </li>
+                            </ul>
+                            {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
