@@ -1,1 +1,1 @@
-web: gunicorn --bind localhost:5000:$PORT flaskapp:app
+web: gunicorn --0.0.0.0:$PORT flaskapp:app
