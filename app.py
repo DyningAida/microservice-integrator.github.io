@@ -97,8 +97,8 @@ def login_auth():
 
 @app.route('/home')
 def home():
-    email = dict[session].get('email',None)
-    return render_template ('index.html', email=email)
+    #email = dict[session].get('email',None)
+    return render_template ('index.html')
 
 
 @app.route('/nilai_mahasiswa')
