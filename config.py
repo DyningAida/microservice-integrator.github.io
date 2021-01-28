@@ -1,4 +1,21 @@
-import os
+class Config(object):
+    DEBUG = False
+    TESTING = False
+    CSRF_ENABLED = True
+    TIMEOUT_COUNT=60
+    DBCONFIG ={
+      'DBNAME' : 'dbname',
+      'DBUSER' : 'laxmikant',
+      'DBPASSWORD' : '*******',
+      'DBHOST' : 'localhost'
+    }
 
-GOOGLE_CLIENT_ID = os.getenv('613016628391-9e3v2n5on64j70sdr2kslsuhoc8a8fbv.apps.googleusercontent.com')
-GOOGLE_CLIENT_SECRET = os.getenv('Lk-bnNkDzrhaxbADcXC4Eb1Z')
+class ProductionConfig(Config):
+    dbcredentials = {'DBUSER' : 'produser', 'DBPASSWORD':'******'}
+    DBCONFIG = Config.DBCONFIG.copy()
+    DBCONFIG.update(dbcredentials)
+
+class DevelopmentConfig(Config):
+    dbcredentials = {'DBUSER' : 'devuser', 'DBPASSWORD':'******'}
+    DBCONFIG = Config.DBCONFIG.copy()
+    DBCONFIG.update(dbcredentials)

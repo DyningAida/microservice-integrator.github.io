@@ -8,6 +8,7 @@ import pymysql
 import os
 from datetime import timedelta
 
+
 def db_connect():
     return pymysql.connect(host='localhost', user='anggaganteng', password='anggagantengbanget', database='simpati', port=3307)
 
@@ -32,47 +33,39 @@ def isLoggedIN():
         return False
 
 app = Flask(__name__)
+
 oauth = OAuth(app)
 app.secret_key = 'tes cobacoba'
 app.config.from_object('config')
-
+GOOGLE_CLIENT_ID = '613016628391-9e3v2n5on64j70sdr2kslsuhoc8a8fbv.apps.googleusercontent.com'
+GOOGLE_CLIENT_SECRET = 'BHQ_2O6Kia3Xk_yb4OuVRwVp'
+FN_BASE_URL = 'localhost:5000'
 CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
 oauth = OAuth(app)
 oauth.register(
     name='google',
-    client_id='613016628391-9e3v2n5on64j70sdr2kslsuhoc8a8fbv.apps.googleusercontent.com',
-    client_secret='BHQ_2O6Kia3Xk_yb4OuVRwVp',
     server_metadata_url=CONF_URL,
-    access_token_url='https://api.manheim.com/oauth2/token.oauth2',
-    access_token_params = None,
-    authorize_params=None,
-    authorize_url='https://accounts.google.com/o/oauth2/auth',
-    api_base_url='https://www.googleapis.com/oauth2/v1/',
     client_kwargs={
         'scope': 'openid email profile'
-    },
-    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo'
+    }
 )
 
 
 @app.route('/authgoogle')
 def authgoogle():
-    google = oauth.create_client('google')
-    token = google.authorize_access_token()
-    #email = google.parse_id_token(token)
-    resp = google.get('userinfo')
-    user_info = resp.json()
-    # do something with the token and profile
-    user = oauth.google.userinfo()
-    session['profile'] = user_info()
+    session['_google_authlib_state_'] = request.args.get('state')
+    session['_google_authlib_redirect_uri_'] = config.FN_BASE_URL + url_for('authgoogle')
+    token = oauth.google.authorize_access_token()
+    user = oauth.google.parse_id_token(token)
+
+    session['user'] = user
     session.permanent = True
     return redirect('/home')
 
-@app.route('/loginauth')
-def loginauth():
-    google = oauth.create_client('google')
-    redirect_uri = url_for('authgoogle', _external=True)
-    return google.authorize_redirect(redirect_uri)
+@app.route('/google_login')
+def google_login():
+    redirect_uri = config.FN_BASE_URL + url_for('authgoogle')
+    return oauth.google.authorize_redirect(redirect_uri)
 
 @app.route('/', methods=['GET'])
 def login():
@@ -202,5 +195,4 @@ def dosen():
 
 
 app.run(debug=True)
-let port = process.env.PORT || 5000;
 
